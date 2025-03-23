@@ -1,20 +1,5 @@
-import { Text, View, StyleSheet } from "react-native";
+import HomePage from "../pages/homePage";
 
 export default function Index() {
-  return (
-    <View
-      style={styles.container}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
-  );
+  return <HomePage />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#2596be",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  }
-})

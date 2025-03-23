@@ -92,6 +92,10 @@ npx expo start
 
 ---
 
+
+## EMULATORT SETUP
+https://www.youtube.com/watch?v=xKGESzemfdw
+
 ## 📄 Licence
 
 MIT
