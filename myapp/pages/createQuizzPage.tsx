@@ -63,8 +63,9 @@ export default function CreateQuizzPage() {
             <Button 
               mode="contained"
               onPress={() => handleAddQuestion()}
+              style={{ marginTop: 10 }}
             >
-              <Text>Přidej otázku</Text>
+              <Text style={{ color: 'white' }}>Přidej otázku</Text>
             </Button>
 
             {/* Zde mapujeme přes všechny otázky */}
