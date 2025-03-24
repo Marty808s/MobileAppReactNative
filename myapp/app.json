@@ -33,6 +33,13 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Aplikace potřebuje přístup k vaší galerii pro ukládání QR kódů.",
+          "savePhotosPermission": "Aplikace potřebuje možnost ukládat QR kódy do vaší galerie."
+        }
       ]
     ],
     "experiments": {

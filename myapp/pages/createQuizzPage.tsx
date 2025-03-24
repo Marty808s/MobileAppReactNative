@@ -1,20 +1,42 @@
 import { useState, useEffect } from "react";
 import { Text, Surface, Button } from 'react-native-paper';
-import { View } from "react-native";
+import { View, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import QuizzEntity from "@/components/createQuizz/quizzEntity";
 import { QuizzQuestion } from "@/utils/QuizzQuestion";
+import { generateAndSaveQRCodes } from "@/utils/exportQR";
+
 
 export default function CreateQuizzPage() {
     const router = useRouter();
     const [quizz, setQuizz] = useState<QuizzQuestion[]>([]);
 
+    const checkQuestions = () => {
+      const notEmpty = quizz.filter(question => {
+        if (!question.question || question.question.trim() === '') return false;
+        
+        if (!question.answers || question.answers.length === 0) return false;
+        
+        const hasEmptyAnswer = question.answers.some(answer => 
+          !answer || answer.trim() === ''
+        );
+        if (hasEmptyAnswer) return false;
+        
+        if (question.correctAnswer === null || question.correctAnswer === undefined) return false;
+        
+        return true;
+      });
+
+      // Vrátí true pokud všechny otázky jsou validní (nemají prázdné hodnoty)
+      return notEmpty.length === quizz.length;
+    }
+
     // přidej mi otázku
     const handleAddQuestion = () => {
       setQuizz([...quizz, {
         question: '',
-        answers: ['', '', '', ''],
+        answers: ['', '', ''], //pevně jen 3
         correctAnswer: 0
       }])
     }
@@ -26,6 +48,7 @@ export default function CreateQuizzPage() {
         ...newQuizz[index],
         ...dataToUpdate
       }
+      console.log(quizz);
       setQuizz(newQuizz);
     }
     
@@ -37,12 +60,14 @@ export default function CreateQuizzPage() {
     }
     
     return (
-      <View style={{ flex: 1 }}>
-        <Surface style={{ 
-          flex: 1,
-          position: 'relative',
-          height: '100%'
-        }}>
+      <Surface style={{ flex: 1, backgroundColor: "rgb(255 255 255)"}}>
+        <ScrollView 
+          contentContainerStyle={{ 
+            flexGrow: 1,
+            padding: 10,
+            paddingBottom: 100 // pro spodní navigaci
+          }}
+        >
           <Surface 
             elevation={0}
             style={{
@@ -79,10 +104,19 @@ export default function CreateQuizzPage() {
               />
             ))}
 
+            { quizz.length > 0 && checkQuestions() && (<Button 
+              mode="contained"
+              onPress={() => generateAndSaveQRCodes(quizz)}
+              style={{ marginTop: 10 }}
+            >
+              <Text style={{ color: 'white' }}>Vygeneruj sadu otázek</Text>
+            </Button>)
+            }
+            
           </Surface>
           <Nav />
-        </Surface>
-      </View>
+        </ScrollView>
+      </Surface>
     );
 }
     
