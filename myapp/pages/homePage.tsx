@@ -8,14 +8,20 @@ export default function HomePage() {
     const router = useRouter();
 
     return (
-        <Surface style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <Surface style={{ 
+          flex: 1,
+          position: 'relative',
+          height: '100%'
+        }}>
           <Surface 
             elevation={0}
             style={{
               flex: 1,
               alignItems: "center",
               padding: 10,
-              backgroundColor: "rgb(255 255 255)"
+              backgroundColor: "rgb(255 255 255)",
+              position: 'relative'
             }}
           >
             
@@ -29,6 +35,7 @@ export default function HomePage() {
           </Surface>
           <Nav />
         </Surface>
+      </View>
     );
 }
     

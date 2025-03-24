@@ -29,12 +29,14 @@ export default function Nav() {
 
             <Button 
                 mode="contained"
-                onPress={() => router.push("test")}
+                onPress={() => router.push("/createQuizz")}
             >
-                Copy
+                Vytvořit Quizz
             </Button>
         </Surface>
     );
 }
+
+    
 
     
