@@ -1,57 +1,25 @@
 import React from 'react';
-import { View } from 'react-native';
 import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
-import QRCode from 'react-native-qrcode-svg';
+import * as Sharing from 'expo-sharing';
 import { QuizzQuestion } from '@/utils/QuizzQuestion';
+import QRCode from 'react-native-qrcode-svg'; // použít pak tohle
 
 export async function generateAndSaveQRCodes(quizz: QuizzQuestion[]) {
   try {
-    // Požádání o povolení přístupu do galerie
-    const { status } = await MediaLibrary.requestPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Potřebujeme povolení pro ukládání do galerie');
-      return;
-    }
+    const timestamp = new Date().getTime();
+    const filePath = FileSystem.documentDirectory + 'qr_code.png'+ {timestamp} + ".png";
+    console.log("Cesta", filePath);
+    
+    // Vytvoříme QR kód jako SVG string - DOLADIT FORMÁT (ASI PŘES KOMPONENTU QRCode)
+    const svgString = `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="200" fill="white"/>
+      <text x="50%" y="50%" text-anchor="middle" dy=".3em">${JSON.stringify(quizz)}</text>
+    </svg>`;
 
-    if (status) {
-        console.log("Mám přístup?", status)
-    }
-
-    let qrRef: any = null;
-
-    const QRComponent = (
-      <QRCode
-        value={JSON.stringify(quizz)}
-        size={200}
-        backgroundColor="white"
-        color="black"
-        getRef={(ref) => (qrRef = ref)}
-      />
-    );
-
-    console.log("QRComponent", QRComponent);
-    console.log("ref", qrRef); // JE NULL
-
-    // Převedení QR kódu na PNG a uložení - NEFUNGUJE
-    if (qrRef) {
-      qrRef.toDataURL((data: string) => {
-        const filePath = FileSystem.documentDirectory + 'qr_code.png';
-        console.log("Path", filePath);
-        FileSystem.writeAsStringAsync(filePath, data, {
-          encoding: FileSystem.EncodingType.Base64,
-        }).then(() => {
-          MediaLibrary.saveToLibraryAsync(filePath)
-            .then(() => {
-              alert('QR kód byl úspěšně uložen do galerie!');
-            })
-            .catch((error) => {
-              console.error('Chyba při ukládání do galerie:', error);
-              alert('Chyba při ukládání do galerie');
-            });
-        });
-      });
-    }
+    // TOHLE UŽ FUNGUJE
+    await FileSystem.writeAsStringAsync(filePath, svgString);
+    await Sharing.shareAsync(filePath);
+    
   } catch (error) {
     console.error('Chyba při generování QR kódu:', error);
     alert('Chyba při generování QR kódu');
