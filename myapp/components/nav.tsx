@@ -7,7 +7,7 @@ export default function Nav() {
 
     return (
         <Surface 
-            elevation={0}
+            elevation={1}
             style={{    
                 flexDirection: 'row',
                 justifyContent: 'space-around',

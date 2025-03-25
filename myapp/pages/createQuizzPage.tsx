@@ -60,7 +60,7 @@ export default function CreateQuizzPage() {
     }
     
     return (
-      <Surface style={{ flex: 1, backgroundColor: "rgb(255 255 255)"}}>
+      <Surface style={{ flex: 1, backgroundColor: "rgb(255 255 255)", height: '100%',}}>
         <ScrollView 
           contentContainerStyle={{ 
             flexGrow: 1,

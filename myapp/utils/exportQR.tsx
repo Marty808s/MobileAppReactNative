@@ -15,7 +15,7 @@ export async function generateAndSaveQRCodes(quizz: QuizzQuestion[]) {
     }
 
     if (status) {
-        console.log(status)
+        console.log("Mám přístup?", status)
     }
 
     let qrRef: any = null;
@@ -30,10 +30,14 @@ export async function generateAndSaveQRCodes(quizz: QuizzQuestion[]) {
       />
     );
 
+    console.log("QRComponent", QRComponent);
+    console.log("ref", qrRef); // JE NULL
+
     // Převedení QR kódu na PNG a uložení - NEFUNGUJE
     if (qrRef) {
       qrRef.toDataURL((data: string) => {
         const filePath = FileSystem.documentDirectory + 'qr_code.png';
+        console.log("Path", filePath);
         FileSystem.writeAsStringAsync(filePath, data, {
           encoding: FileSystem.EncodingType.Base64,
         }).then(() => {
