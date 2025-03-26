@@ -33,6 +33,14 @@ export default function Nav() {
             >
                 Vytvořit Quizz
             </Button>
+
+            <Button 
+                mode="contained"
+                onPress={() => router.push("/scan")}
+                >
+                Skenovat
+            </Button>
+            
         </Surface>
     );
 }

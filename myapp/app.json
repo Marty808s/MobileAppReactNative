@@ -40,7 +40,16 @@
           "photosPermission": "Aplikace potřebuje přístup k vaší galerii pro ukládání QR kódů.",
           "savePhotosPermission": "Aplikace potřebuje možnost ukládat QR kódy do vaší galerie."
         }
-      ]
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Aplikace požaduje přístup k fotoaparátu zařízení",
+          "microphonePermission": "Aplikace požaduje přístup k mikrofonu kamery",
+          "recordAudioAndroid": true
+        }
+      ],
+      "expo-barcode-scanner"
     ],
     "experiments": {
       "typedRoutes": true
