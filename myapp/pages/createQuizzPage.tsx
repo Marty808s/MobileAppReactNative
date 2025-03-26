@@ -1,16 +1,53 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Text, Surface, Button } from 'react-native-paper';
 import { View, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import QuizzEntity from "@/components/createQuizz/quizzEntity";
 import { QuizzQuestion } from "@/utils/QuizzQuestion";
-import { generateAndSaveQRCodes } from "@/utils/exportQR";
+import QRCode from 'react-native-qrcode-svg';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 
 
 export default function CreateQuizzPage() {
     const router = useRouter();
     const [quizz, setQuizz] = useState<QuizzQuestion[]>([]);
+    const [showQR, setShowQR] = useState(false);
+    const qrRef = useRef<any>(null);
+
+    useEffect(() => {
+        if (showQR && qrRef.current) {
+            qrRef.current.toDataURL(async (dataUrl: string) => {
+                try {
+                    const timestamp = new Date().getTime();
+                    const filePath = FileSystem.documentDirectory + `qr_code_${timestamp}.png`;
+                    
+                    if (!dataUrl) {
+                        throw new Error('QR kód se nepodařilo vygenerovat');
+                    }
+
+                    const base64Data = dataUrl.includes('base64,') 
+                        ? dataUrl.split('base64,')[1] 
+                        : dataUrl;
+
+                    if (!base64Data) {
+                        throw new Error('Neplatná data QR kódu');
+                    }
+
+                    await FileSystem.writeAsStringAsync(filePath, base64Data, { encoding: FileSystem.EncodingType.Base64 });
+                    await Sharing.shareAsync(filePath);
+                } catch (error) {
+                    console.error('Chyba:', error);
+                    alert('Chyba při generování QR kódu');
+                } finally {
+                    setShowQR(false);
+                }
+            });
+        }
+    }, [showQR, quizz]);
+
+    let ref: any = null;
 
     const checkQuestions = () => {
       const notEmpty = quizz.filter(question => {
@@ -28,7 +65,6 @@ export default function CreateQuizzPage() {
         return true;
       });
 
-      // Vrátí true pokud všechny otázky jsou validní (nemají prázdné hodnoty)
       return notEmpty.length === quizz.length;
     }
 
@@ -93,7 +129,6 @@ export default function CreateQuizzPage() {
               <Text style={{ color: 'white' }}>Přidej otázku</Text>
             </Button>
 
-            {/* Zde mapujeme přes všechny otázky */}
             {quizz.map((question, index) => (
               <QuizzEntity
                 key={index}
@@ -104,14 +139,25 @@ export default function CreateQuizzPage() {
               />
             ))}
 
-            { quizz.length > 0 && checkQuestions() && (<Button 
-              mode="contained"
-              onPress={() => generateAndSaveQRCodes(quizz)}
-              style={{ marginTop: 10 }}
-            >
-              <Text style={{ color: 'white' }}>Vygeneruj sadu otázek</Text>
-            </Button>)
-            }
+
+            <View style={{ position: 'absolute', opacity: 0, width: 1, height: 1 }}>
+                <QRCode
+                    value={JSON.stringify(quizz)}
+                    size={200}
+                    getRef={(ref) => (qrRef.current = ref)}
+                />
+            </View>
+
+
+            {quizz.length > 0 && checkQuestions() && (
+              <Button 
+                mode="contained"
+                onPress={() => setShowQR(true)}
+                style={{ marginTop: 10 }}
+              >
+                <Text style={{ color: 'white' }}>Vygeneruj sadu otázek</Text>
+              </Button>
+            )}
             
           </Surface>
           <Nav />
