@@ -37,6 +37,8 @@ export default function CreateQuizzPage() {
 
                     await FileSystem.writeAsStringAsync(filePath, base64Data, { encoding: FileSystem.EncodingType.Base64 });
                     await Sharing.shareAsync(filePath);
+                    // TADY UDĚLAT ZÁPIS DO SQL LITE - PRO IMPORT + ÚPRAVU A EXPORT (proměnná quizz)
+
                 } catch (error) {
                     console.error('Chyba:', error);
                     alert('Chyba při generování QR kódu');

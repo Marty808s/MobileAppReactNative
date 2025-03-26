@@ -13,13 +13,14 @@ export default function Nav() {
                 justifyContent: 'space-around',
                 alignItems: 'center',
                 backgroundColor: "rgb(103 22 209)",
-                padding: 10,
+                padding: 25,
                 position: 'absolute',
                 bottom: 0,
                 left: 0,
                 right: 0,
             }}
         >
+            {/* PŘEDĚLAT DO IKON - REACT FA + TLAČÍTKO JÁ (ZÁPISI SKORE Z MÝCH HER, MOJE KVÍZY) */}
             <Button 
                 mode="contained"
                 onPress={() => router.push("/")}
@@ -31,14 +32,14 @@ export default function Nav() {
                 mode="contained"
                 onPress={() => router.push("/createQuizz")}
             >
-                Vytvořit Quizz
+                Studio
             </Button>
 
             <Button 
                 mode="contained"
                 onPress={() => router.push("/scan")}
                 >
-                Skenovat
+                Hra
             </Button>
             
         </Surface>
