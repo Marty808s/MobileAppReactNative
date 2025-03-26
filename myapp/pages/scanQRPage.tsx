@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { router } from 'expo-router';
 
 import { QuizzQuestion } from '@/utils/QuizzQuestion';
 
@@ -27,7 +28,12 @@ export default function ScanPage() {
       try {
         const quizz: QuizzQuestion[] = JSON.parse(data);
         console.log('Naskenovaný kvíz:', quizz);
-        alert('QR kód byl úspěšně naskenován!');
+        router.push({
+          pathname: '/quizz',
+          params: {
+            quizzData: JSON.stringify(quizz)
+          }
+        });
       } catch (error) {
         alert('Neplatný QR kód kvízu');
       }

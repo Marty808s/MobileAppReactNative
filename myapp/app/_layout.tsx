@@ -35,6 +35,11 @@ export default function RootLayout() {
           name="scan"
           options={{...DEAFULT_STYLE, headerTitle: "Skenovat QR kód"}}
         />
+
+      <Stack.Screen 
+          name="quizz"
+          options={{...DEAFULT_STYLE, headerTitle: "Hra začíná"}}
+        />
       </Stack>
     </PaperProvider>
   );
