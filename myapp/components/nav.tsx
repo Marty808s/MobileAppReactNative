@@ -25,7 +25,7 @@ export default function Nav() {
                 mode="contained"
                 onPress={() => router.push("/")}
             >
-                Home
+                Profil
             </Button>
 
             <Button 

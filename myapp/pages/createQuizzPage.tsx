@@ -8,7 +8,7 @@ import { QuizzQuestion } from "@/utils/QuizzQuestion";
 import QRCode from 'react-native-qrcode-svg';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-
+import * as db from "@/utils/db";
 
 export default function CreateQuizzPage() {
     const router = useRouter();
@@ -37,7 +37,13 @@ export default function CreateQuizzPage() {
 
                     await FileSystem.writeAsStringAsync(filePath, base64Data, { encoding: FileSystem.EncodingType.Base64 });
                     await Sharing.shareAsync(filePath);
+                    
                     // TADY UDĚLAT ZÁPIS DO SQL LITE - PRO IMPORT + ÚPRAVU A EXPORT (proměnná quizz)
+                    const quizzName = quizz[0].question;
+                    const quizzData = JSON.stringify(quizz);
+                    console.log("quizzName", quizzName);
+                    console.log("quizzData", quizzData);
+                    await db.insertQuizz(quizzName, quizzData);
 
                 } catch (error) {
                     console.error('Chyba:', error);

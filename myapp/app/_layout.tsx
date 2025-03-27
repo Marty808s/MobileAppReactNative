@@ -11,7 +11,6 @@ const theme = {
 };
 
 export default function RootLayout() {
-
   const DEAFULT_STYLE = {
     headerStyle: {
       backgroundColor: colors.primary,
@@ -35,8 +34,7 @@ export default function RootLayout() {
           name="scan"
           options={{...DEAFULT_STYLE, headerTitle: "Skenovat QR kód"}}
         />
-
-      <Stack.Screen 
+        <Stack.Screen 
           name="quizz"
           options={{...DEAFULT_STYLE, headerTitle: "Hra začíná"}}
         />

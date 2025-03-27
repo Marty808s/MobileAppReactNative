@@ -35,6 +35,21 @@
         }
       ],
       [
+        "expo-sqlite",
+        {
+          "name": "openquizz",
+          "enableFTS": true,
+          "useSQLCipher": true,
+          "android": {
+            "enableFTS": false,
+            "useSQLCipher": false
+          },
+          "ios": {
+            "customBuildFlags": ["-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"]
+          }
+        }
+      ],
+      [
         "expo-media-library",
         {
           "photosPermission": "Aplikace potřebuje přístup k vaší galerii pro ukládání QR kódů.",
@@ -49,7 +64,8 @@
           "recordAudioAndroid": true
         }
       ],
-      "expo-barcode-scanner"
+      "expo-barcode-scanner",
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true
