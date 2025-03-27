@@ -16,19 +16,20 @@ export default function QuizzGamePage({ quizzData }: QuizzGameProps) {
     const [answers, setAnswers] = useState<AnswerDictionary>({});
     const [score, setScore] = useState<number>(0);
 
-    // Funkce pro aktualizaci odpovědí
     const handleAnswerSelect = (questionIndex: number, selectedAnswer: number) => {
+        if (answers[questionIndex] !== undefined) {
+            return;
+        }
+
         setAnswers(prev => ({
             ...prev,
             [questionIndex]: selectedAnswer
-            // POKUD JE NA QUESTION INDEXU ODPOVĚD, TAK JÍ UŽ NEZMĚNÍM
         }));
-    };
 
-    useEffect(() => {
-      console.log("Odpovědi", answers)
-      // TADY BUDE VYHODNOCENI A PŘIČTENÍ SCORE
-    },[answers])
+        if (selectedAnswer === quizzData[questionIndex].correctAnswer) {
+            setScore(prev => prev + 10);
+        }
+    };
 
 
     return (
@@ -50,9 +51,28 @@ export default function QuizzGamePage({ quizzData }: QuizzGameProps) {
                             <AnswerEntity 
                                 quizz={question}
                                 onAnswerSelect={(answer) => handleAnswerSelect(index, answer)}
+                                answers={Object.values(answers)}
+                                questionIndex={index}
                             />
                         </View>
                     ))}
+                    {Object.keys(answers).length === quizzData.length && (
+                        <Button 
+                            mode="contained" 
+                            onPress={() => {
+                                console.log(answers) // tady udělat zápis do db s výsledky
+                            }} style={{
+                                marginTop: 10,
+                                marginBottom: 60,
+                                marginHorizontal: 20,
+                                paddingVertical: 8,
+                                borderRadius: 8,
+                                backgroundColor: '#9545FD',
+                                elevation: 2,
+                            }}>
+                                Zobrazit výsledky
+                        </Button>
+                    )}
                 </Surface>
             </ScrollView>
             <Score score={score} />

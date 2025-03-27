@@ -5,15 +5,31 @@ import { QuizzQuestion } from "@/utils/QuizzQuestion";
 
 interface AnswerEntityProps {
     quizz: QuizzQuestion;
+    answers: { [key: number]: number };
+    questionIndex: number;
     onAnswerSelect: (selectedAnswer: number) => void;
 }
 
-export default function AnswerEntity({ quizz, onAnswerSelect }: AnswerEntityProps) {
-    const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-
+export default function AnswerEntity({ quizz, answers, questionIndex, onAnswerSelect }: AnswerEntityProps) {
+    const isAnswered = answers[questionIndex] !== undefined;
+    const isCorrect = (index: number) => quizz.correctAnswer === index;
+    
     const handleAnswerSelect = (index: number) => {
-        setSelectedAnswer(index);
-        onAnswerSelect(index);
+        if (!isAnswered) {
+            onAnswerSelect(index);
+        }
+    };
+
+    const getAnswerStyle = (index: number) => {
+        if (!isAnswered) return styles.answerText;
+        
+        if (isCorrect(index)) {
+            return [styles.answerText, styles.correctAnswer];
+        }
+        if (answers[questionIndex] === index) {
+            return [styles.answerText, styles.wrongAnswer];
+        }
+        return styles.answerText;
     };
 
     return (
@@ -25,9 +41,10 @@ export default function AnswerEntity({ quizz, onAnswerSelect }: AnswerEntityProp
                     <RadioButton.Item
                         label={answer}
                         value={index.toString()}
-                        status={selectedAnswer === index ? 'checked' : 'unchecked'}
+                        status={answers[questionIndex] === index ? 'checked' : 'unchecked'}
                         onPress={() => handleAnswerSelect(index)}
-                        labelStyle={styles.answerText}
+                        disabled={isAnswered}
+                        labelStyle={getAnswerStyle(index)}
                     />
                 </View>
             ))}
@@ -55,5 +72,13 @@ const styles = StyleSheet.create({
     },
     answerText: {
         fontSize: 16,
+    },
+    correctAnswer: {
+        color: 'green',
+        fontWeight: 'bold',
+    },
+    wrongAnswer: {
+        color: 'red',
+        textDecorationLine: 'line-through',
     }
 });
