@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Text, Surface, Button } from 'react-native-paper';
 import { View, ScrollView } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import QuizzEntity from "@/components/createQuizz/quizzEntity";
 import { QuizzQuestion } from "@/utils/QuizzQuestion";
@@ -9,12 +9,33 @@ import QRCode from 'react-native-qrcode-svg';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as db from "@/utils/db";
+import { parse } from "@babel/core";
 
 export default function CreateQuizzPage() {
     const router = useRouter();
-    const [quizz, setQuizz] = useState<QuizzQuestion[]>([]);
+    const { initQuizz } = useLocalSearchParams();
+    console.log("Získané data z initQuizz", initQuizz);
+
+    const [quizz, setQuizz] = useState<QuizzQuestion[]>(() => {
+        if (!initQuizz) return [];
+        
+        try {
+            const parsedData = JSON.parse(initQuizz as string);
+            // Pokud je quiz_data string (JSON), parsujeme ho
+            const quizData = typeof parsedData.quiz_data === 'string' 
+                ? JSON.parse(parsedData.quiz_data)
+                : parsedData.quiz_data;
+            
+            console.log('Parsed quiz data:', quizData);
+            return quizData;
+        } catch (error) {
+            console.error('Error parsing initQuizz:', error);
+            return [];
+        }
+    });
     const [showQR, setShowQR] = useState(false);
     const qrRef = useRef<any>(null);
+
 
     useEffect(() => {
         if (showQR && qrRef.current) {
