@@ -27,3 +27,9 @@ export interface AnswerDictionary {
 export interface QuizzIdProps {
     quizzId: number;
 }
+
+export interface ScoreRow {
+    id: number;
+    quizz_id: number;
+    points: number;
+}

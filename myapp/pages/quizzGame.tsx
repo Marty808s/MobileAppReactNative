@@ -3,6 +3,7 @@ import AnswerEntity from '@/components/quizzGame/answerEntity';
 import { Text, Surface, Button } from 'react-native-paper';
 import { View, ScrollView, StyleSheet } from "react-native";
 import React, {useEffect, useState} from 'react';
+import * as db from '@/utils/db';
 import Score from '@/components/score';
 
 
@@ -60,8 +61,10 @@ export default function QuizzGamePage({ quizz, quizzId }: QuizzGameProps) {
                         <Button 
                             mode="contained" 
                             onPress={() => {
-                                console.log(answers) // tady udělat zápis do db s výsledky
-                            }} style={{
+                                console.log(answers);
+                                db.insertResult(quizzId, score);   
+                            }} 
+                            style={{
                                 marginTop: 10,
                                 marginBottom: 60,
                                 marginHorizontal: 20,
@@ -70,7 +73,7 @@ export default function QuizzGamePage({ quizz, quizzId }: QuizzGameProps) {
                                 backgroundColor: '#9545FD',
                                 elevation: 2,
                             }}>
-                                Zobrazit výsledky
+                                Uložit výsledky
                         </Button>
                     )}
                 </Surface>

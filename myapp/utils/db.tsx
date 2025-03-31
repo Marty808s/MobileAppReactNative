@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { QuizzRow } from './QuizzInterfaces';
+import { QuizzRow, ScoreRow } from './QuizzInterfaces';
 // https://docs.expo.dev/versions/latest/sdk/sqlite/
 
 
@@ -68,6 +68,21 @@ export async function updateQuizz(id: number, name: string, quizData: string) {
 }
 
 
+export async function deleteQuestions() {
+    const db = getDb();
+    console.log("Delete paměť")
+    try {
+        await db.execAsync('DELETE FROM quizz_results');
+        await db.execAsync('DELETE FROM quizz');
+        console.log("Všechna data byla smazána");
+    } catch (error) {
+        console.error("Chyba při mazání dat:", error);
+    } finally {
+        await db.closeAsync();
+    }
+}
+
+
 export async function getQuizz(id: number) {
     const db = getDb();
     const statement = await db.prepareAsync(
@@ -104,6 +119,7 @@ export async function getAllQuizzes(): Promise<QuizzRow[]> {
 
 // results table - založ mi výsledek
 export async function insertResult(quizz_id: number, points: number) {
+    console.log("Zápis výsledku");
     const db = getDb();
     const statement = await db.prepareAsync(
         'INSERT INTO quizz_results (quizz_id, points) VALUES ($quizz_id, $points)'
@@ -117,12 +133,25 @@ export async function insertResult(quizz_id: number, points: number) {
 // results table - získej mi všechny výsledky
 export async function getResults() {
     const db = getDb();
-    const statement = await db.prepareAsync(
-        'SELECT * FROM quizz_results'
-    );
-    const result = await statement.executeAsync();
-    await statement.finalizeAsync();
-    await db.closeAsync();
-    return result;
+    try {
+        const statement = await db.prepareAsync(
+            'SELECT * FROM quizz_results'
+        );
+        const result = await statement.executeAsync();
+        const rows = await result.getAllAsync();
+        await statement.finalizeAsync();
+
+        const scores = rows.map((row: any) => ({
+            id: row.id,
+            quizz_id: row.quizz_id,
+            points: row.points
+        }));
+
+        console.log('history from db:', scores);
+        return scores;
+        
+    } finally {
+        await db.closeAsync();  
+    }
 }
 
