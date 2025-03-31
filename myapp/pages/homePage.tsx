@@ -1,17 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Text, Surface, Button } from 'react-native-paper';
 import { View, FlatList } from "react-native";
 import { useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import * as db from "../utils/db";
 import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
-
-
-interface QuizzRow {
-  id: number;
-  name: string;
-  quiz_data: string;
-}
+import { QuizzRow } from "@/utils/QuizzInterfaces";
+import { useFocusEffect } from '@react-navigation/native';
 
 const GRID_COLUMNS = 2;
 
@@ -19,22 +14,26 @@ export default function HomePage() {
     const router = useRouter();
     const [quizzes, setQuizzes] = useState<QuizzRow[]>([]);
 
-    useEffect(() => {
-        const fetchQuizzes = async () => {
-            try {
-                const result = await db.getAllQuizzes();
-                console.log("Fetched quizzes:", result);
-                setQuizzes(result || []);
-            } catch (error) {
-                console.error("Error fetching quizzes:", error);
-                setQuizzes([]);
-            }
-        };
-        fetchQuizzes();
-    }, []);
+    //useFocusEffect - zavolané při zobrazení stránky
+    useFocusEffect(
+        useCallback(() => {
+            const fetchQuizzes = async () => {
+              console.log("fetchQuizzes Callback...");
+                try {
+                    const result = await db.getAllQuizzes();
+                    //console.log("Fetched quizzes:", result);
+                    setQuizzes(result as unknown as QuizzRow[] || []);
+                } catch (error) {
+                    console.error("Error fetching quizzes:", error);
+                    setQuizzes([]);
+                }
+            };
+            fetchQuizzes();
+        }, [])
+    );
 
     useEffect(()=> {
-      console.log("Quizzes po formátování", quizzes);
+      //console.log("Quizzes po formátování", quizzes);
     }, [quizzes])
 
 
@@ -83,6 +82,7 @@ export default function HomePage() {
               }}
             >
               Vytvořené otázky: {quizzes && ("(" + quizzes?.length + ")")}
+              {/* PŘIDAT TLAČÍTKO NA SMAZÁNÍ VŠECH KURZŮ */}
             </Text>
 
             {quizzes.length === 0 ? (

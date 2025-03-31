@@ -1,7 +1,7 @@
 import * as SQLite from 'expo-sqlite';
+import { QuizzRow } from './QuizzInterfaces';
 // https://docs.expo.dev/versions/latest/sdk/sqlite/
 
-// NEFUNGUJÍ CALLS NA DB - NEVRACÍ DATA... OPRAVIT PODLE GETALLQUIZZES
 
 // Funkce pro získání nového připojení
 function getDb() {
@@ -55,6 +55,19 @@ export async function insertQuizz(name: string, quizData: string) {
 }
 
 
+// quizz table - aktualizuj mi quizz
+export async function updateQuizz(id: number, name: string, quizData: string) {
+    console.log("updateQuizz", id, name, quizData);
+    const db = getDb();
+    const statement = await db.prepareAsync(
+        'UPDATE quizz SET name = $name, quiz_data = $quiz_data WHERE id = $id'
+    );
+    await statement.executeAsync({ $id: id, $name: name, $quiz_data: quizData });
+    await statement.finalizeAsync();
+    await db.closeAsync();
+}
+
+
 export async function getQuizz(id: number) {
     const db = getDb();
     const statement = await db.prepareAsync(
@@ -66,14 +79,6 @@ export async function getQuizz(id: number) {
     await db.closeAsync();
     return result;
 }
-
-
-interface QuizzRow {
-    id: number;
-    name: string;
-    quiz_data: string;
-}
-
 
 export async function getAllQuizzes(): Promise<QuizzRow[]> {
     const db = getDb();

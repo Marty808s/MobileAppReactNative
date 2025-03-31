@@ -3,7 +3,7 @@ import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { router } from 'expo-router';
 
-import { QuizzQuestion } from '@/utils/QuizzQuestion';
+import { QuizzRow, QuizzQR } from '@/utils/QuizzInterfaces';
 
 export default function ScanPage() {
     const [permission, requestPermission] = useCameraPermissions();
@@ -26,7 +26,7 @@ export default function ScanPage() {
       setScanned(true);
       console.log("Callback na scan kodu")
       try {
-        const quizz: QuizzQuestion[] = JSON.parse(data);
+        const quizz: QuizzQR = JSON.parse(data);
         console.log('Naskenovaný kvíz:', quizz);
         router.push({
           pathname: '/quizz',

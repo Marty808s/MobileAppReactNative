@@ -1,20 +1,20 @@
-import { QuizzQuestion } from '@/utils/QuizzQuestion';
+import { QuizzQuestion, QuizzGameProps, AnswerDictionary } from '@/utils/QuizzInterfaces';
 import AnswerEntity from '@/components/quizzGame/answerEntity';
 import { Text, Surface, Button } from 'react-native-paper';
 import { View, ScrollView, StyleSheet } from "react-native";
 import React, {useEffect, useState} from 'react';
 import Score from '@/components/score';
 
-interface QuizzGameProps {
-  quizzData: QuizzQuestion[];
-}
-interface AnswerDictionary {
-    [key: number]: number; 
-}
 
-export default function QuizzGamePage({ quizzData }: QuizzGameProps) {
+export default function QuizzGamePage({ quizz, quizzId }: QuizzGameProps) {
     const [answers, setAnswers] = useState<AnswerDictionary>({});
     const [score, setScore] = useState<number>(0);
+
+    if (!quizz) {
+        return <Text>Načítání...</Text>;
+    }
+
+    console.log("quizzData", quizz);
 
     const handleAnswerSelect = (questionIndex: number, selectedAnswer: number) => {
         if (answers[questionIndex] !== undefined) {
@@ -26,7 +26,7 @@ export default function QuizzGamePage({ quizzData }: QuizzGameProps) {
             [questionIndex]: selectedAnswer
         }));
 
-        if (selectedAnswer === quizzData[questionIndex].correctAnswer) {
+        if (selectedAnswer === quizz[questionIndex].correctAnswer) {
             setScore(prev => prev + 10);
         }
     };
@@ -43,10 +43,10 @@ export default function QuizzGamePage({ quizzData }: QuizzGameProps) {
                         Kvíz
                     </Text>
                     
-                    {quizzData.map((question, index) => (
+                    {quizz.map((question, index) => (
                         <View key={index} style={styles.questionContainer}>
                             <Text style={styles.questionNumber}>
-                                Otázka {index + 1}/{quizzData.length}
+                                Otázka {index + 1}/{quizz.length}
                             </Text>
                             <AnswerEntity 
                                 quizz={question}
@@ -56,7 +56,7 @@ export default function QuizzGamePage({ quizzData }: QuizzGameProps) {
                             />
                         </View>
                     ))}
-                    {Object.keys(answers).length === quizzData.length && (
+                    {Object.keys(answers).length === quizz.length && (
                         <Button 
                             mode="contained" 
                             onPress={() => {

@@ -20,7 +20,7 @@ export default function Index() {
   }, []);
 
   if (!isReady) {
-    return <Text>Loading...</Text>;
+    return <Text>Načítání...</Text>;
   }
   return <HomePage/>;
 }

@@ -4,7 +4,7 @@ import { View, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import QuizzEntity from "@/components/createQuizz/quizzEntity";
-import { QuizzQuestion } from "@/utils/QuizzQuestion";
+import { QuizzQuestion } from "@/utils/QuizzInterfaces";
 import QRCode from 'react-native-qrcode-svg';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
@@ -14,8 +14,8 @@ import { parse } from "@babel/core";
 export default function CreateQuizzPage() {
     const router = useRouter();
     const { initQuizz } = useLocalSearchParams();
-    console.log("Získané data z initQuizz", initQuizz);
-
+    const [quizzId, setQuizzId] = useState<number>();
+    //console.log("Získané data z initQuizz", initQuizz);
     const [quizz, setQuizz] = useState<QuizzQuestion[]>(() => {
         if (!initQuizz) return [];
         
@@ -35,6 +35,19 @@ export default function CreateQuizzPage() {
     });
     const [showQR, setShowQR] = useState(false);
     const qrRef = useRef<any>(null);
+
+    useEffect(() => {
+      if (initQuizz) {
+          const parsedData = JSON.parse(initQuizz as string);
+          setQuizzId(parsedData.id);
+      }
+    }, [initQuizz]);
+
+    useEffect(() => {
+      console.log("quizzId", quizzId);
+      console.log("quizz", quizz);
+    }, [quizzId, quizz]);
+
 
 
     useEffect(() => {
@@ -64,7 +77,14 @@ export default function CreateQuizzPage() {
                     const quizzData = JSON.stringify(quizz);
                     console.log("quizzName", quizzName);
                     console.log("quizzData", quizzData);
-                    await db.insertQuizz(quizzName, quizzData);
+
+                    if (quizzId) {
+                      //existující kvíz
+                      await db.updateQuizz(quizzId, quizzName, quizzData);
+                    } else {
+                      //nový kvíz
+                      await db.insertQuizz(quizzName, quizzData);
+                    }
 
                 } catch (error) {
                     console.error('Chyba:', error);
@@ -123,6 +143,12 @@ export default function CreateQuizzPage() {
       newQuizz.splice(index, 1);
       setQuizz(newQuizz);
     }
+
+    const createQRValue = () => {
+      const val = JSON.stringify({quizz, "id": quizzId})
+      console.log("val", val);
+      return val;
+    }
     
     return (
       <Surface style={{ flex: 1, backgroundColor: "rgb(255 255 255)", height: '100%',}}>
@@ -147,7 +173,7 @@ export default function CreateQuizzPage() {
               variant="headlineMedium" 
               style={{ color: 'rgba(0, 0, 0, 0.87)' }}
             >
-              Vytvoření kvízu
+              Vytvoření kvízu {quizzId ? ("id:" + quizzId) : "| NOVÝ"}
             </Text>
 
             <Button 
@@ -171,7 +197,7 @@ export default function CreateQuizzPage() {
 
             <View style={{ position: 'absolute', opacity: 0, width: 1, height: 1 }}>
                 <QRCode
-                    value={JSON.stringify(quizz)}
+                    value={createQRValue()}
                     size={200}
                     getRef={(ref) => (qrRef.current = ref)}
                 />

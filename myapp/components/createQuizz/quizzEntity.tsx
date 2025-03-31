@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Text, Surface, TextInput, Button, RadioButton } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
-import { QuizzQuestion } from "@/utils/QuizzQuestion";
+import { QuizzQuestion } from "@/utils/QuizzInterfaces";
 
 interface QuizzEntityProps {
   quizz: QuizzQuestion;
