@@ -1,0 +1,3 @@
+HISTORIE - quizz_id je none (PROBLÉM JE PŘI NAČTENÍ S QR KODU - NENÍ ZDE QUIZZ ID) - DONE
+Po dohrání hry se nemůžu vrátit na index page - DONE
+CELKOVÝ REFACTORING A SEGMENTACE KÓDU - IN PROGRESS

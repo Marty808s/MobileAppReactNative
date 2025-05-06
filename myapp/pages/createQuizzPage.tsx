@@ -10,14 +10,24 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as db from "@/utils/db";
 import { parse } from "@babel/core";
+import { getNextQuizzId } from "@/utils/db";
 
 export default function CreateQuizzPage() {
     const router = useRouter();
+
+    const handleNextQuizzId = async () => {
+        const newQuizzId = await getNextQuizzId();
+        setNewQuizzId(newQuizzId);
+    }
+
     const { initQuizz } = useLocalSearchParams();
     const [quizzId, setQuizzId] = useState<number>();
-    //console.log("Získané data z initQuizz", initQuizz);
+    const [newQuizzId, setNewQuizzId] = useState<number>();
     const [quizz, setQuizz] = useState<QuizzQuestion[]>(() => {
-        if (!initQuizz) return [];
+        if (!initQuizz) {
+            handleNextQuizzId();
+            return [];
+        }
         
         try {
             const parsedData = JSON.parse(initQuizz as string);
@@ -72,7 +82,6 @@ export default function CreateQuizzPage() {
                     await FileSystem.writeAsStringAsync(filePath, base64Data, { encoding: FileSystem.EncodingType.Base64 });
                     await Sharing.shareAsync(filePath);
                     
-                    // TADY UDĚLAT ZÁPIS DO SQL LITE - PRO IMPORT + ÚPRAVU A EXPORT (proměnná quizz)
                     const quizzName = quizz[0].question;
                     const quizzData = JSON.stringify(quizz);
                     console.log("quizzName", quizzName);
@@ -144,8 +153,9 @@ export default function CreateQuizzPage() {
       setQuizz(newQuizz);
     }
 
+    // vygeneruj mi JSON pro QR kód
     const createQRValue = () => {
-      const val = JSON.stringify({quizz, "id": quizzId})
+      const val = JSON.stringify({quizz, "id": quizzId || newQuizzId})
       console.log("val", val);
       return val;
     }

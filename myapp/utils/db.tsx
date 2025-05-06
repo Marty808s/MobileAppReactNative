@@ -42,6 +42,8 @@ export async function createTables() {
 // quizz table - založ mi quizz
 export async function insertQuizz(name: string, quizData: string) {
     const db = getDb();
+    console.log("--------------------------------");
+    console.log("insertQuizz", name, quizData);
     try {
         const statement = await db.prepareAsync(
             'INSERT INTO quizz (name, quiz_data) VALUES ($name, $quiz_data)'
@@ -49,6 +51,7 @@ export async function insertQuizz(name: string, quizData: string) {
         await statement.executeAsync({ $name: name, $quiz_data: quizData });
         await statement.finalizeAsync();
         console.log("quizz inserted");
+        console.log("--------------------------------");
     } finally {
         await db.closeAsync();
     }
@@ -95,12 +98,14 @@ export async function getQuizz(id: number) {
     return result;
 }
 
+
 export async function getAllQuizzes(): Promise<QuizzRow[]> {
     const db = getDb();
     try {
         const statement = await db.prepareAsync('SELECT * FROM quizz');
         const result = await statement.executeAsync();
-        const rows = await result.getAllAsync();
+        const rows: any[] = await result.getAllAsync();
+        console.log("rows", rows.length);
         await statement.finalizeAsync();
         
         const quizzes = rows.map((row: any) => ({
@@ -119,7 +124,7 @@ export async function getAllQuizzes(): Promise<QuizzRow[]> {
 
 // results table - založ mi výsledek
 export async function insertResult(quizz_id: number, points: number) {
-    console.log("Zápis výsledku");
+    console.log("Zápis výsledku", quizz_id, points);
     const db = getDb();
     const statement = await db.prepareAsync(
         'INSERT INTO quizz_results (quizz_id, points) VALUES ($quizz_id, $points)'
@@ -152,6 +157,29 @@ export async function getResults() {
         
     } finally {
         await db.closeAsync();  
+    }
+}
+
+// získej mi id pro nový kvíz - ze sekvence
+export async function getNextQuizzId(): Promise<number> {
+    const db = getDb();
+    try {
+        const statement = await db.prepareAsync(
+            "SELECT seq + 1 AS next_id FROM sqlite_sequence WHERE name='quizz';"
+        );
+        const result = await statement.executeAsync();
+        const rows: any[] = await result.getAllAsync();
+        await statement.finalizeAsync();
+        await db.closeAsync();
+
+        if (rows.length > 0 && rows[0].next_id != null) {
+            return rows[0].next_id;
+        } else {
+            return 1;
+        }
+    } catch (error) {
+        await db.closeAsync();
+        throw error;
     }
 }
 

@@ -85,6 +85,7 @@ export default function HomePage() {
       fetchInit();
     }
 
+    // předávání dat do createQuizz (pro možný edit)
     const renderQuizButton = ({ item: quizz }: { item: QuizzRow }) => (
         // když ho podržím, tak ho odstraním - DODĚLAT
         <Button 

@@ -1,5 +1,5 @@
 import CreateQuizzPage from "../pages/createQuizzPage";
 
-export default function Copy() {
+export default function CreateQuizz() {
   return <CreateQuizzPage />;
 } 

@@ -5,11 +5,12 @@ import { View, ScrollView, StyleSheet } from "react-native";
 import React, {useEffect, useState} from 'react';
 import * as db from '@/utils/db';
 import Score from '@/components/score';
-
+import { useRouter } from 'expo-router';
 
 export default function QuizzGamePage({ quizz, quizzId }: QuizzGameProps) {
     const [answers, setAnswers] = useState<AnswerDictionary>({});
     const [score, setScore] = useState<number>(0);
+    const router = useRouter();
 
     if (!quizz) {
         return <Text>Načítání...</Text>;
@@ -62,7 +63,8 @@ export default function QuizzGamePage({ quizz, quizzId }: QuizzGameProps) {
                             mode="contained" 
                             onPress={() => {
                                 console.log(answers);
-                                db.insertResult(quizzId, score);   
+                                db.insertResult(quizzId, score);
+                                router.push("/");
                             }} 
                             style={{
                                 marginTop: 10,
