@@ -46,6 +46,12 @@ const styles = StyleSheet.create({
     },
 });
 
+const headerStyle = { 
+  color: 'rgba(0, 0, 0, 0.87)',
+  marginBottom: 10,
+  marginTop: 10
+}
+
 export default function HomePage() {
     const router = useRouter();
     const [quizzes, setQuizzes] = useState<QuizzRow[]>([]);
@@ -108,10 +114,7 @@ export default function HomePage() {
 
             <Text 
               variant="headlineMedium" 
-              style={{ 
-                color: 'rgba(0, 0, 0, 0.87)',
-                marginBottom: 10
-              }}
+              style={headerStyle}
             >
               Vytvořené otázky: {quizzes.length > 0 && ("(" + quizzes?.length + ")")}
             </Text>
@@ -145,11 +148,7 @@ export default function HomePage() {
 
             <Text 
               variant="headlineMedium" 
-              style={{ 
-                color: 'rgba(0, 0, 0, 0.87)',
-                marginBottom: 10,
-                marginTop: 10
-              }}
+              style={headerStyle}
             >
               Historie: {scores.length > 0 && ("(" + scores?.length + ")")}
             </Text>
