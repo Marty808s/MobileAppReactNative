@@ -4,9 +4,10 @@ import { View, FlatList, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import * as db from "../utils/db";
-import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
-import { QuizzRow, ScoreRow } from "@/utils/QuizzInterfaces";
+import { QuizzRow, ScoreRow } from "@/models/Models";
 import { useFocusEffect } from '@react-navigation/native';
+import renderQuizzButton from "@/components/homePage/renderQuizzButton";
+import renderScoreTable from "@/components/homePage/renderScoreTable";
 
 const GRID_COLUMNS = 2;
 
@@ -55,11 +56,10 @@ export default function HomePage() {
       console.log("fetchQuizzes Callback...");
         try {
             const result = await db.getAllQuizzes();
-            //console.log("Fetched quizzes:", result);
-            setQuizzes(result as unknown as QuizzRow[] || []);
+            setQuizzes(result as QuizzRow[] || []);
 
             const scoreFetch = await db.getResults()
-            setScores(scoreFetch as unknown as ScoreRow[] || []);
+            setScores(scoreFetch as ScoreRow[] || []);
 
         } catch (error) {
             console.log("Error fetching init:", error);
@@ -67,46 +67,29 @@ export default function HomePage() {
         }
     };
 
-    //useFocusEffect - zavolané při zobrazení stránky
+    //useFocusEffect - zavolá se při zobrazení stránky
     useFocusEffect(
         useCallback(() => {
           fetchInit();
         }, [])
     );
 
+    // pro debug
     useEffect(()=> {
+      console.log("*********************")
       console.log("Quizzes po formátování", quizzes);
       console.log("*********************")
       console.log('Historie', scores);
+      console.log("*********************")
     }, [quizzes, scores])
 
+    // Odstranění všech otázek
     const handleDelete = () => {
       db.deleteQuestions();
       fetchInit();
     }
 
-    // předávání dat do createQuizz (pro možný edit)
-    const renderQuizButton = ({ item: quizz }: { item: QuizzRow }) => (
-        // když ho podržím, tak ho odstraním - DODĚLAT
-        <Button 
-            key={quizz.id}
-            onPress={() => router.push({
-                pathname: '/createQuizz',
-                params: {
-                    initQuizz: JSON.stringify(quizz)
-                }
-            })}
-            style={{
-                margin: 1,
-                flex: 1,
-                minWidth: '45%',
-            }}
-            mode="outlined"
-        >
-            {quizz.name}
-        </Button>
-    );
-
+  
     return (
       <View style={{ flex: 1 }}>
         <Surface style={{ 
@@ -133,7 +116,7 @@ export default function HomePage() {
               Vytvořené otázky: {quizzes.length > 0 && ("(" + quizzes?.length + ")")}
             </Text>
 
-            
+            {/* Odstranění všech otázek */}
             <Button
                 onPress={() => handleDelete()}
                 mode="contained"
@@ -148,7 +131,7 @@ export default function HomePage() {
             ) : (
               <FlatList
                 data={quizzes}
-                renderItem={renderQuizButton}
+                renderItem={renderQuizzButton}
                 keyExtractor={(item) => item.id.toString()}
                 numColumns={GRID_COLUMNS}
                 style={{ width: '100%' }}
@@ -172,22 +155,7 @@ export default function HomePage() {
             </Text>
             
             {/* Vykreslení skore */}
-           {scores.length > 0 ? (<View style={styles.tableContainer}>
-                <View style={styles.tableHeader}>
-                    <Text style={[styles.tableCell, styles.headerText]}>Název kvízu</Text>
-                    <Text style={[styles.tableCell, styles.headerText]}>Body</Text>
-                </View>
-                {scores.map((score, index) => (
-                    <View key={index} style={[styles.tableRow, index % 2 === 0 ? styles.evenRow : styles.oddRow]}>
-                        <Text style={styles.tableCell}>
-                            {quizzes.find(q => q.id === score.quizz_id)?.name || 'Neznámý'}
-                        </Text>
-                        <Text style={styles.tableCell}>
-                            {score.points}
-                        </Text>
-                    </View>
-                ))}
-            </View>)
+           {scores.length > 0 ? (renderScoreTable({scores}, {quizzes}, {styles}))
             :
             (<Text>Žádná historie není k dispozici</Text>)}
 
