@@ -4,7 +4,7 @@ import { View, FlatList, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import * as db from "../utils/db";
-import { QuizzRow, ScoreRow } from "@/models/Models";
+import { QuizzRow, ScoreRow } from "@/interfaces/QuizzInterface";
 import { useFocusEffect } from '@react-navigation/native';
 import renderQuizzButton from "@/components/homePage/renderQuizzButton";
 import renderScoreTable from "@/components/homePage/renderScoreTable";

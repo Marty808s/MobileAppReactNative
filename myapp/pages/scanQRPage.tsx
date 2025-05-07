@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { router } from 'expo-router';
-import { QuizzQR } from '@/models/Models';
+import { QuizzQR } from '@/interfaces/QuizzInterface';
 
 const styles = StyleSheet.create({
   container: {

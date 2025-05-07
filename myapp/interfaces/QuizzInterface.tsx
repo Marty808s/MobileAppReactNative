@@ -33,3 +33,14 @@ export interface ScoreRow {
     quizz_id: number;
     points: number;
 }
+
+export interface Score {
+    score: number;
+}
+
+export interface AnswerEntityProps {
+    quizz: QuizzQuestion;
+    answers: { [key: number]: number };
+    questionIndex: number;
+    onAnswerSelect: (selectedAnswer: number) => void;
+}

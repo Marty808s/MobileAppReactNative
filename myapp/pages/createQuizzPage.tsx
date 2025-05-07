@@ -4,13 +4,13 @@ import { View, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import QuizzEntity from "@/components/createQuizz/quizzEntity";
-import { QuizzQuestion } from "@/models/Models";
+import { QuizzQuestion } from "@/interfaces/QuizzInterface";
 import QRCode from 'react-native-qrcode-svg';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as db from "@/utils/db";
 import { getNextQuizzId } from "@/utils/db";
-
+import checkQuestions from "@/utils/checkQuestions";
 
 export default function CreateQuizzPage() {
     const router = useRouter();
@@ -115,26 +115,6 @@ export default function CreateQuizzPage() {
         }
     }, [showQR, quizz]);
 
-    // kontrola integrity otázek
-    const checkQuestions = () => {
-      const notEmpty = quizz.filter(question => {
-        if (!question.question || question.question.trim() === '') return false;
-        
-        if (!question.answers || question.answers.length === 0) return false;
-        
-        const hasEmptyAnswer = question.answers.some(answer => 
-          !answer || answer.trim() === ''
-        );
-        if (hasEmptyAnswer) return false;
-        
-        if (question.correctAnswer === null || question.correctAnswer === undefined) return false;
-        
-        return true;
-      });
-
-      // kontrola, zda jsou všechny otázky validní
-      return notEmpty.length === quizz.length;
-    }
 
     // přidej mi otázku
     const handleAddQuestion = () => {
@@ -226,7 +206,7 @@ export default function CreateQuizzPage() {
             </View>
 
             {/* vygenerovat sadu otázek */}
-            {quizz.length > 0 && checkQuestions() && (
+            {quizz.length > 0 && checkQuestions(quizz) && (
               <Button 
                 mode="contained"
                 onPress={() => setShowQR(true)}

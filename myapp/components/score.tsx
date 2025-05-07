@@ -1,19 +1,6 @@
 import { Surface, Text } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-
-interface Score {
-    score: number;
-}
-
-export default function Score({ score }: Score) {
-    return (
-        <Surface style={styles.container}>
-            <Text style={styles.scoreText}>
-                Skóre: <Text style={styles.scoreNumber}>{score}</Text>
-            </Text>
-        </Surface>
-    );
-}
+import { Score } from '@/interfaces/QuizzInterface';
 
 const styles = StyleSheet.create({
     container: {
@@ -38,6 +25,17 @@ const styles = StyleSheet.create({
         color: '#FFD700',
     }
 });
+
+
+export default function ScorePanel({ score }: Score) {
+    return (
+        <Surface style={styles.container}>
+            <Text style={styles.scoreText}>
+                Skóre: <Text style={styles.scoreNumber}>{score}</Text>
+            </Text>
+        </Surface>
+    );
+}
 
     
 

@@ -1,6 +1,6 @@
 
 import { Button } from 'react-native-paper';
-import { QuizzRow } from "@/models/Models";
+import { QuizzRow } from "@/interfaces/QuizzInterface";
 import { useRouter } from "expo-router";
 
 export default function renderQuizzButton({ item: quizz }: { item: QuizzRow }) {
