@@ -4,48 +4,56 @@ import { View, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import QuizzEntity from "@/components/createQuizz/quizzEntity";
-import { QuizzQuestion } from "@/utils/QuizzInterfaces";
+import { QuizzQuestion } from "@/models/Models";
 import QRCode from 'react-native-qrcode-svg';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as db from "@/utils/db";
-import { parse } from "@babel/core";
 import { getNextQuizzId } from "@/utils/db";
+
 
 export default function CreateQuizzPage() {
     const router = useRouter();
 
+    //získání nového id kvízu (ze sekvence pro QR kód)
     const handleNextQuizzId = async () => {
         const newQuizzId = await getNextQuizzId();
         setNewQuizzId(newQuizzId);
     }
 
+    //získání id kvízu z URL
     const { initQuizz } = useLocalSearchParams();
+    // kvíz id (z URL)
     const [quizzId, setQuizzId] = useState<number>();
+    // nové id kvízu (ze sekvence pro QR kód)
     const [newQuizzId, setNewQuizzId] = useState<number>();
+    // kvíz
     const [quizz, setQuizz] = useState<QuizzQuestion[]>(() => {
         if (!initQuizz) {
-            handleNextQuizzId();
-            return [];
+          // nemám init quizz z URL, takže vygeneruju nový
+          handleNextQuizzId();
+          return [];
         }
         
         try {
             const parsedData = JSON.parse(initQuizz as string);
-            // Pokud je quiz_data string (JSON), parsujeme ho
-            const quizData = typeof parsedData.quiz_data === 'string' 
-                ? JSON.parse(parsedData.quiz_data)
-                : parsedData.quiz_data;
-            
+            // získám data kvízu
+            const quizData = typeof parsedData.quiz_data === 'string' && JSON.parse(parsedData.quiz_data)
             console.log('Parsed quiz data:', quizData);
+            // vrátím data kvízu
             return quizData;
         } catch (error) {
             console.error('Error parsing initQuizz:', error);
             return [];
         }
     });
+
+    // zobrazit QR kód
     const [showQR, setShowQR] = useState(false);
+    // reference na QR kód - pro generování
     const qrRef = useRef<any>(null);
 
+    // useEffect pro získání id kvízu z URL - kvůli QR kódu
     useEffect(() => {
       if (initQuizz) {
           const parsedData = JSON.parse(initQuizz as string);
@@ -53,13 +61,13 @@ export default function CreateQuizzPage() {
       }
     }, [initQuizz]);
 
+    // pro debug
     useEffect(() => {
       console.log("quizzId", quizzId);
       console.log("quizz", quizz);
     }, [quizzId, quizz]);
 
-
-
+    // generování QR kódu
     useEffect(() => {
         if (showQR && qrRef.current) {
             qrRef.current.toDataURL(async (dataUrl: string) => {
@@ -82,16 +90,18 @@ export default function CreateQuizzPage() {
                     await FileSystem.writeAsStringAsync(filePath, base64Data, { encoding: FileSystem.EncodingType.Base64 });
                     await Sharing.shareAsync(filePath);
                     
+                    // získání názvu kvízu
                     const quizzName = quizz[0].question;
+                    // získání dat kvízu
                     const quizzData = JSON.stringify(quizz);
                     console.log("quizzName", quizzName);
                     console.log("quizzData", quizzData);
 
                     if (quizzId) {
-                      //existující kvíz
+                      //existující kvíz - aktualizace
                       await db.updateQuizz(quizzId, quizzName, quizzData);
                     } else {
-                      //nový kvíz
+                      //nový kvíz - vložení
                       await db.insertQuizz(quizzName, quizzData);
                     }
 
@@ -105,8 +115,7 @@ export default function CreateQuizzPage() {
         }
     }, [showQR, quizz]);
 
-    let ref: any = null;
-
+    // kontrola integrity otázek
     const checkQuestions = () => {
       const notEmpty = quizz.filter(question => {
         if (!question.question || question.question.trim() === '') return false;
@@ -123,6 +132,7 @@ export default function CreateQuizzPage() {
         return true;
       });
 
+      // kontrola, zda jsou všechny otázky validní
       return notEmpty.length === quizz.length;
     }
 
@@ -155,6 +165,7 @@ export default function CreateQuizzPage() {
 
     // vygeneruj mi JSON pro QR kód
     const createQRValue = () => {
+      // hodnoty pro QR kód
       const val = JSON.stringify({quizz, "id": quizzId || newQuizzId})
       console.log("val", val);
       return val;
@@ -194,6 +205,7 @@ export default function CreateQuizzPage() {
               <Text style={{ color: 'white' }}>Přidej otázku</Text>
             </Button>
 
+            {/* otázky */}
             {quizz.map((question, index) => (
               <QuizzEntity
                 key={index}
@@ -204,7 +216,7 @@ export default function CreateQuizzPage() {
               />
             ))}
 
-
+            {/* QR kód */}
             <View style={{ position: 'absolute', opacity: 0, width: 1, height: 1 }}>
                 <QRCode
                     value={createQRValue()}
@@ -213,7 +225,7 @@ export default function CreateQuizzPage() {
                 />
             </View>
 
-
+            {/* vygenerovat sadu otázek */}
             {quizz.length > 0 && checkQuestions() && (
               <Button 
                 mode="contained"
