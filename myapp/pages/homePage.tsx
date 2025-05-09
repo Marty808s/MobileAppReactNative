@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Text, Surface, Button } from 'react-native-paper';
-import { View, FlatList, StyleSheet, ScrollView } from "react-native";
+import { View, ScrollView, FlatList } from 'react-native'
 import { useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import * as db from "../utils/db";
@@ -8,59 +8,15 @@ import { QuizzRow, ScoreRow } from "@/interfaces/QuizzInterface";
 import { useFocusEffect } from '@react-navigation/native';
 import renderQuizzButton from "@/components/homePage/renderQuizzButton";
 import renderScoreTable from "@/components/homePage/renderScoreTable";
+import { homePageStyle } from "@/theme/styles";
+import { homePageHeaderStyle } from "@/theme/styles";
 
+// počet sloupců entit vytvořených otázek
 const GRID_COLUMNS = 1;
 
-const styles = StyleSheet.create({
-    tableContainer: {
-        margin: 10,
-        borderRadius: 8,
-        overflow: 'hidden',
-        borderWidth: 1,
-        borderColor: '#ddd',
-    },
-    tableHeader: {
-        flexDirection: 'row',
-        backgroundColor: '#9545FD',
-        padding: 10,
-    },
-    tableRow: {
-        flexDirection: 'row',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
-    },
-    tableCell: {
-        flex: 1,
-        textAlign: 'center',
-    },
-    headerText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    evenRow: {
-        backgroundColor: '#fff',
-    },
-    oddRow: {
-        backgroundColor: '#f9f9f9',
-    },
-    questionsContainer: {
-        flex: 1,
-        marginBottom: 5,
-        minHeight: 200
-    },
-    historyContainer: {
-        flex: 1,
-        marginBottom: 20,
-        minHeight: 200
-    }
-});
-
-const headerStyle = { 
-  color: 'rgba(0, 0, 0, 0.87)',
-  marginBottom: 10,
-  marginTop: 2
-}
+// import style sheetů
+const styles = homePageStyle;
+const headerStyle = homePageHeaderStyle;
 
 export default function HomePage() {
     const router = useRouter();
@@ -105,7 +61,7 @@ export default function HomePage() {
       fetchInit();
     }
 
-  
+
     return (
       <View style={{ flex: 1 }}>
         <Surface style={{ 
@@ -124,7 +80,7 @@ export default function HomePage() {
 
             <Text 
               variant="headlineMedium" 
-              style={headerStyle}
+              style={headerStyle.text}
             >
               Vytvořené otázky: {quizzes.length > 0 && ("(" + quizzes?.length + ")")}
             </Text>
@@ -158,7 +114,7 @@ export default function HomePage() {
 
             <Text 
               variant="headlineMedium" 
-              style={headerStyle}
+              style={headerStyle.text}
             >
               Historie: {scores.length > 0 && ("(" + scores?.length + ")")}
             </Text>

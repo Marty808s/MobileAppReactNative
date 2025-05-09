@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
 import { Text, Surface, TextInput, Button, RadioButton } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
-import { QuizzQuestion } from "@/utils/QuizzInterfaces";
+import { QuizzQuestion, QuizzEntityProps } from "@/interfaces/QuizzInterface";
+import { quizzEntityStyle } from "@/theme/styles"
 
-interface QuizzEntityProps {
-  quizz: QuizzQuestion;
-  handleQuestionChange: (index: number, dataToUpdate: Partial<QuizzQuestion>) => void;
-  index: number;
-  onRemove: (index: number) => void;
-}
 
 export default function QuizzEntity({ quizz, handleQuestionChange, index, onRemove }: QuizzEntityProps) {
+    
+    const styles = quizzEntityStyle
+    
     return (
-
         <Surface style={styles.container} elevation={1}>
             {/* Otázka */}
             <TextInput
@@ -58,35 +55,3 @@ export default function QuizzEntity({ quizz, handleQuestionChange, index, onRemo
         </Surface>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        padding: 16,
-        margin: 8,
-        borderRadius: 8,
-        backgroundColor: 'white',
-        width: '100%',
-        maxWidth: 600,
-    },
-    questionInput: {
-        marginBottom: 16,
-    },
-    sectionTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
-    answerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 8,
-    },
-    answerInput: {
-        flex: 1,
-        marginRight: 8,
-    },
-    deleteButton: {
-        marginTop: 16,
-        borderColor: 'red',
-    }
-});

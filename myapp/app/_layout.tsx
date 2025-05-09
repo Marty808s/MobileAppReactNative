@@ -1,10 +1,8 @@
 import { Stack } from "expo-router";
 import { PaperProvider, MD3LightTheme } from 'react-native-paper'; //stylování materials - pomocí providers
 import { colors } from '../theme/colors';
-import CreateQuizzPage from "@/pages/createQuizzPage";
 
 //TOHLE JE JAKO INDEX.JS V REACTU - nastavuji zde routování
-
 const theme = {
   ...MD3LightTheme,
   colors: {

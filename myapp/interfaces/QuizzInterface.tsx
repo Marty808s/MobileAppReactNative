@@ -44,3 +44,11 @@ export interface AnswerEntityProps {
     questionIndex: number;
     onAnswerSelect: (selectedAnswer: number) => void;
 }
+
+export interface QuizzEntityProps {
+    quizz: QuizzQuestion;
+    handleQuestionChange: (index: number, dataToUpdate: Partial<QuizzQuestion>) => void;
+    index: number;
+    onRemove: (index: number) => void;
+  }
+  
