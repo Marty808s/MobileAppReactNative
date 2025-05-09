@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Text, Surface, Button } from 'react-native-paper';
-import { View, FlatList, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import * as db from "../utils/db";
@@ -9,7 +9,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import renderQuizzButton from "@/components/homePage/renderQuizzButton";
 import renderScoreTable from "@/components/homePage/renderScoreTable";
 
-const GRID_COLUMNS = 2;
+const GRID_COLUMNS = 1;
 
 const styles = StyleSheet.create({
     tableContainer: {
@@ -44,12 +44,22 @@ const styles = StyleSheet.create({
     oddRow: {
         backgroundColor: '#f9f9f9',
     },
+    questionsContainer: {
+        flex: 1,
+        marginBottom: 5,
+        minHeight: 200
+    },
+    historyContainer: {
+        flex: 1,
+        marginBottom: 20,
+        minHeight: 200
+    }
 });
 
 const headerStyle = { 
   color: 'rgba(0, 0, 0, 0.87)',
   marginBottom: 10,
-  marginTop: 10
+  marginTop: 2
 }
 
 export default function HomePage() {
@@ -132,18 +142,18 @@ export default function HomePage() {
             {quizzes.length === 0 ? (
               <Text>Žádné kvízy nejsou k dispozici</Text>
             ) : (
-              <FlatList
-                data={quizzes}
-                renderItem={renderQuizzButton}
-                keyExtractor={(item) => item.id.toString()}
-                numColumns={GRID_COLUMNS}
-                style={{ width: '100%' }}
-                contentContainerStyle={{ paddingBottom: 80 }}
-                columnWrapperStyle={{
-                  justifyContent: 'space-between',
-                  padding: 2,
-                }}
-              />
+              <View style={styles.questionsContainer}>
+                <FlatList
+                  data={quizzes}
+                  renderItem={renderQuizzButton}
+                  keyExtractor={(item) => item.id.toString()}
+                  style={{ width: '100%' }}
+                  contentContainerStyle={{ 
+                    flexGrow: 1
+                  }}
+                  ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+                />
+              </View>
             )}
 
             <Text 
@@ -154,9 +164,13 @@ export default function HomePage() {
             </Text>
             
             {/* Vykreslení skore */}
-           {scores.length > 0 ? (renderScoreTable({scores}, {quizzes}, {styles}))
-            :
-            (<Text>Žádná historie není k dispozici</Text>)}
+            <View style={styles.historyContainer}>
+              <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                {scores.length > 0 ? (renderScoreTable({scores}, {quizzes}, {styles}))
+                :
+                (<Text>Žádná historie není k dispozici</Text>)}
+              </ScrollView>
+            </View>
 
           </Surface>
           <Nav />

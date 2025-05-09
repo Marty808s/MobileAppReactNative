@@ -1,6 +1,7 @@
 HISTORIE - quizz_id je none (PROBLÉM JE PŘI NAČTENÍ S QR KODU - NENÍ ZDE QUIZZ ID) - DONE
 Po dohrání hry se nemůžu vrátit na index page - DONE
+quizz.tsx => QuizzPage() - získání dat kvízu z URL (init fetch) - PŘEDĚLAT DO USESTATE S USE_EFFECTEM NA INIT LOAD - DONE
+index stránka - homePage - udělat historii scrollable, změnit layout vytvořených otázek - DONE
 
-quizz.tsx => QuizzPage() - získání dat kvízu z URL (init fetch) - PŘEDĚLAT DO USESTATE S USE_EFFECTEM NA INIT LOAD
-Styly jednotlivých stránek přehodit do theme složky? - pak je importovat
-index stránka - homePage - udělat historii scrollable, změnit layout vytvořených otázek
+VELKÉ (OBECNÉ) Styly jednotlivých stránek přehodit do theme složky? - pak je importovat
+quizz.tsx => QuizzGamePage() => opravit scroll layout

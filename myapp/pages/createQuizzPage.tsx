@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Text, Surface, Button } from 'react-native-paper';
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, FlatList } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import Nav from "@/components/nav";
 import QuizzEntity from "@/components/createQuizz/quizzEntity";
@@ -152,39 +152,42 @@ export default function CreateQuizzPage() {
     }
     
     return (
-      <Surface style={{ flex: 1, backgroundColor: "rgb(255 255 255)", height: '100%',}}>
-        <ScrollView 
-          contentContainerStyle={{ 
-            flexGrow: 1,
+      <Surface style={{ flex: 1, backgroundColor: "rgb(255 255 255)", height: '100%' }}>
+        <Surface 
+          elevation={0}
+          style={{
+            flex: 1,
+            alignItems: "center", 
             padding: 10,
-            paddingBottom: 100 // pro spodní navigaci
+            backgroundColor: "rgb(255 255 255)",
+            position: 'relative',
+            width: '100%'
           }}
         >
-          <Surface 
-            elevation={0}
-            style={{
-              flex: 1,
-              alignItems: "center",
-              padding: 10,
-              backgroundColor: "rgb(255 255 255)",
-              position: 'relative'
-            }}
+          <Text 
+            variant="headlineMedium" 
+            style={{ color: 'rgba(0, 0, 0, 0.87)', marginBottom: 16 }}
           >
-            <Text 
-              variant="headlineMedium" 
-              style={{ color: 'rgba(0, 0, 0, 0.87)' }}
-            >
-              Vytvoření kvízu {quizzId ? ("id:" + quizzId) : "| NOVÝ"}
-            </Text>
+            Vytvoření kvízu {quizzId ? ("id:" + quizzId) : "| NOVÝ"}
+          </Text>
 
-            <Button 
-              mode="contained"
-              onPress={() => handleAddQuestion()}
-              style={{ marginTop: 10 }}
-            >
-              <Text style={{ color: 'white' }}>Přidej otázku</Text>
-            </Button>
+          <Button 
+            mode="contained"
+            onPress={() => handleAddQuestion()}
+            style={{ marginBottom: 16, width: '60%' }}
+          >
+            <Text style={{ color: 'white' }}>Přidej otázku</Text>
+          </Button>
 
+          <ScrollView 
+            style={{ width: '100%' }}
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              paddingBottom: 200, // pro spodní navigaci
+              gap: 16 // mezera mezi otázkami
+            }}
+            showsVerticalScrollIndicator={false}
+          >
             {/* otázky */}
             {quizz.map((question, index) => (
               <QuizzEntity
@@ -210,16 +213,14 @@ export default function CreateQuizzPage() {
               <Button 
                 mode="contained"
                 onPress={() => setShowQR(true)}
-                style={{ marginTop: 10 }}
+                style={{ marginTop: 24, marginBottom: 16, width: '100%' }}
               >
                 <Text style={{ color: 'white' }}>Vygeneruj sadu otázek</Text>
               </Button>
             )}
-            
-          </Surface>
-          <Nav />
-        </ScrollView>
+          </ScrollView>
+        </Surface>
+        <Nav />
       </Surface>
     );
 }
-    

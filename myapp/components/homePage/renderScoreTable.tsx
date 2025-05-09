@@ -1,6 +1,6 @@
 
 import { QuizzRow, ScoreRow } from "@/interfaces/QuizzInterface";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 
 export default function renderScoreTable({scores}: {scores: ScoreRow[]}, {quizzes}: {quizzes: QuizzRow[]}, {styles}: {styles: StyleSheet}) {
     return (
