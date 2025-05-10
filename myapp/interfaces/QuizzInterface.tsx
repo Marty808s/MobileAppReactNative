@@ -54,7 +54,11 @@ export interface QuizzEntityProps {
 
 
 export interface StatEntityProps {
-    quizz: Partial<QuizzRow>
-    score: Score
+    quizz: {
+        id: number;
+        name: string;
+        quiz_data: Score[];
+    };
+    score: Score;
 }
   

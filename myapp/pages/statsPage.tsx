@@ -51,9 +51,7 @@ export default function StatPage() {
                                     ...quizStats[0].quizz,
                                     quiz_data: quizStats.map(stat => stat.score)
                                 },
-                                score: {
-                                    score: quizStats.reduce((acc, curr) => acc + curr.score.score, 0) / quizStats.length
-                                }
+                                score: quizStats.reduce((acc, curr) => acc + curr.score.score, 0) / quizStats.length
                             };
                             return (
                                 <StatEntity 

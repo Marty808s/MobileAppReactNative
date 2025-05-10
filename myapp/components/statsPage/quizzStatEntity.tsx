@@ -9,12 +9,13 @@ export default function StatEntity({ entity }: { entity: StatEntityProps }) {
     const screenWidth = Dimensions.get('window').width;
     const dataLength = entity.quizz.quiz_data?.length || 0;
     const chartWidth = Math.max(screenWidth - 80, dataLength * 100); // minimální šířka pro scroll
+    const tagCon = 3
 
     const dataToView = {
         labels: entity.quizz.quiz_data?.map((_, index) => `${index + 1}`) || [],
         datasets: [
             {
-                data: entity.quizz.quiz_data?.map((_, index) => entity.score.score) || []
+                data: entity.quizz.quiz_data?.map(score => score.score) || []
             }
         ]
     };
@@ -58,6 +59,21 @@ export default function StatEntity({ entity }: { entity: StatEntityProps }) {
                 }}>
                     Počet pokusů: {dataLength}
                 </Text>
+
+                <Text style={{ 
+                    color: 'gray',
+                    fontSize: 14
+                }}>
+                    Průměrný počet bodů: {entity.score}
+                </Text>
+
+                {dataLength >= tagCon && <Text style={{ 
+                    color: 'red',
+                    fontSize: 14,
+                    marginTop: 4
+                }}>
+                    *Posuňte grafem pro další záznamy
+                </Text>}
             </View>
 
             <ScrollView 
