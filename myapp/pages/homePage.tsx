@@ -85,16 +85,6 @@ export default function HomePage() {
               Vytvořené otázky: {quizzes.length > 0 && ("(" + quizzes?.length + ")")}
             </Text>
 
-            {/* Odstranění všech otázek */}
-            <Button
-                onPress={() => handleDelete()}
-                mode="contained"
-                style={{ marginTop: 10, marginBottom: 10 }}
-              >
-                Vymazat paměť 
-              </Button>
-
-
             {quizzes.length === 0 ? (
               <Text>Žádné kvízy nejsou k dispozici</Text>
             ) : (
@@ -127,6 +117,15 @@ export default function HomePage() {
                 (<Text>Žádná historie není k dispozici</Text>)}
               </ScrollView>
             </View>
+
+            {/* Vymazání paměti */}
+              <Button
+                onPress={() => handleDelete()}
+                mode="contained"
+                style={{ marginTop: 25, backgroundColor: "red" }}
+              >
+                Vymazat paměť 
+            </Button>
 
           </Surface>
           <Nav />

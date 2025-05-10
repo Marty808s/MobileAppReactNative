@@ -51,4 +51,10 @@ export interface QuizzEntityProps {
     index: number;
     onRemove: (index: number) => void;
   }
+
+
+export interface StatEntityProps {
+    quizz: Partial<QuizzRow>
+    score: Score
+}
   

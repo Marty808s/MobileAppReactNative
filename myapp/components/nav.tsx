@@ -1,6 +1,7 @@
 import { Surface, Button } from 'react-native-paper';
 import { View } from "react-native";
 import { useRouter } from "expo-router";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Nav() {
     const router = useRouter();
@@ -13,35 +14,40 @@ export default function Nav() {
                 justifyContent: 'space-around',
                 alignItems: 'center',
                 backgroundColor: "rgb(103 22 209)",
-                padding: 25,
+                padding: 20,
                 position: 'absolute',
                 bottom: 0,
                 left: 0,
                 right: 0,
             }}
         >
-            {/* PŘEDĚLAT DO IKON - REACT FA + TLAČÍTKO JÁ (ZÁPISI SKORE Z MÝCH HER, MOJE KVÍZY) */}
             <Button 
                 mode="contained"
                 onPress={() => router.push("/")}
             >
-                Profil
+                <MaterialCommunityIcons name="account" size={24} color="white" />
             </Button>
 
             <Button 
                 mode="contained"
                 onPress={() => router.push("/createQuizz")}
             >
-                Studio
+                <MaterialCommunityIcons name="card-plus" size={24} color="white" />
             </Button>
 
             <Button 
                 mode="contained"
                 onPress={() => router.push("/scan")}
-                >
-                Hra
+            >
+                <MaterialCommunityIcons name="gamepad" size={24} color="white" />
             </Button>
-            
+
+            <Button 
+                mode="contained"
+                onPress={() => router.push("/stats")}
+            >
+                <MaterialCommunityIcons name="chart-line" size={24} color="white" />
+            </Button>
         </Surface>
     );
 }

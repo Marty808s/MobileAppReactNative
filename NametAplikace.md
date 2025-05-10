@@ -14,18 +14,15 @@ Aplikace, která umožňuje:
 ### Frontend
 - [React Native](https://reactnative.dev/) (Expo framework)
 - [Expo](https://expo.dev/)
-- [React Navigation](https://reactnavigation.org/)
 
 ### Databáze
 - [expo-sqlite](https://docs.expo.dev/versions/latest/sdk/sqlite/) – lokální ukládání skóre
 
 ### QR funkce
-- [expo-barcode-scanner](https://docs.expo.dev/versions/latest/sdk/bar-code-scanner/) – skenování QR kódů
 - [react-native-qrcode-svg](https://github.com/awesomejerry/react-native-qrcode-svg) – generování QR kódů
 
 ### Pomocné knihovny
-- [zod](https://github.com/colinhacks/zod) nebo `ajv` – validace JSON struktury
-- [expo-sharing](https://docs.expo.dev/versions/latest/sdk/sharing/) – sdílení vygenerovaných QR kódů (volitelné)
+- [expo-sharing](https://docs.expo.dev/versions/latest/sdk/sharing/) – sdílení vygenerovaných QR kódů
 
 ---
 

@@ -168,7 +168,7 @@ export default function CreateQuizzPage() {
             variant="headlineMedium" 
             style={{ color: 'rgba(0, 0, 0, 0.87)', marginBottom: 16 }}
           >
-            Vytvoření kvízu {quizzId ? ("id:" + quizzId) : "| NOVÝ"}
+            {quizzId ? ("Úprava kvízu: id " + quizzId) : "Vytvoření nového kvízu"}
           </Text>
 
           <Button 

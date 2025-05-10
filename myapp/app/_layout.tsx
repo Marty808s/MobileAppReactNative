@@ -25,11 +25,11 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen 
           name="index"
-          options={{...DEAFULT_STYLE, headerTitle: "Hlavní stránka"}}
+          options={{...DEAFULT_STYLE, headerTitle: "Profil"}}
         />
         <Stack.Screen 
           name="createQuizz" 
-          options={{...DEAFULT_STYLE, headerTitle: "Vytvoření kvízu"}}
+          options={{...DEAFULT_STYLE, headerTitle: "Studio"}}
         />
         <Stack.Screen 
           name="scan"
@@ -38,6 +38,10 @@ export default function RootLayout() {
         <Stack.Screen 
           name="quizz"
           options={{...DEAFULT_STYLE, headerTitle: "Hra začíná"}}
+        />
+        <Stack.Screen 
+          name="stats"
+          options={{...DEAFULT_STYLE, headerTitle: "Statistiky"}}
         />
       </Stack>
     </PaperProvider>

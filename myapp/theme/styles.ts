@@ -50,7 +50,8 @@ export const homePageHeaderStyle = StyleSheet.create({
   text: {
     color: 'rgba(0, 0, 0, 0.87)',
     marginBottom: 10,
-    marginTop: 2
+    marginTop: 2,
+    fontSize: 22,
   },
   subtext: {
     textAlign: 'center',

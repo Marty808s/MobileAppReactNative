@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { QuizzRow, ScoreRow } from './QuizzInterfaces';
+import { QuizzRow, ScoreRow } from '@/interfaces/QuizzInterface';
 // https://docs.expo.dev/versions/latest/sdk/sqlite/
 
 
@@ -183,3 +183,32 @@ export async function getNextQuizzId(): Promise<number> {
     }
 }
 
+
+export async function getStats() {
+    const db = getDb();
+    try {
+        const statement = await db.prepareAsync(
+            'SELECT q.id, q.name, q.quiz_data, r.points as score FROM quizz q JOIN quizz_results r ON q.id = r.quizz_id'
+        );
+        const result = await statement.executeAsync();
+        const rows = await result.getAllAsync();
+        await statement.finalizeAsync();
+
+        const stats = rows.map((row: any) => ({
+            quizz: {
+                id: row.id,
+                name: row.name,
+                quiz_data: JSON.parse(row.quiz_data)
+            },
+            score: {
+                score: row.score
+            }
+        }));
+
+        console.log('getStats from db:', stats);
+        return stats;
+        
+    } finally {
+        await db.closeAsync();  
+    }
+}
