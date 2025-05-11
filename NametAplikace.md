@@ -1,4 +1,3 @@
-
 # 📱 QR Kvíz App – React Native + Expo
 
 Aplikace, která umožňuje:
@@ -6,7 +5,6 @@ Aplikace, která umožňuje:
 - ✅ Validovat JSON a zobrazit interaktivní kvíz
 - 🗃️ Ukládat skóre do lokální SQLite databáze
 - 🛠️ Vytvářet vlastní kvízy a generovat pro ně QR kód
-
 ---
 
 ## 🧰 Tech Stack
@@ -24,29 +22,16 @@ Aplikace, která umožňuje:
 ### Pomocné knihovny
 - [expo-sharing](https://docs.expo.dev/versions/latest/sdk/sharing/) – sdílení vygenerovaných QR kódů
 
----
-
-## 📦 Struktura projektu
-
-```
-/App.js
-/screens/
-  - HomeScreen.js
-  - ScannerScreen.js
-  - QuizScreen.js
-  - ResultScreen.js
-/utils/
-  - db.js             # SQLite wrapper
-  - jsonValidator.js  # Validace JSON struktury
-```
-
+### Stylování
+- [React Native Paper](https://callstack.github.io/react-native-paper/) – Material Design komponenty
+- [Materials Community Icons](https://static.enapter.com/rn/icons/material-community.html) – ikony
+- Style Sheets
 ---
 
 ## 🧩 Ukázka struktury JSON kvízu
 
 ```json
 {
-  "title": "Kvíz o zvířatech",
   "questions": [
     {
       "question": "Jaký je největší savec?",
@@ -70,9 +55,8 @@ Aplikace, která umožňuje:
 - [x] Zobrazení otázek a odpovědí
 - [x] Vyhodnocení výsledků
 - [x] Ukládání skóre do SQLite
-- [ ] Editor vlastního kvízu
-- [ ] Generování QR kódu z vlastního JSON
-- [ ] Sdílení QR kódu
+- [x] Editor vlastního kvízu
+- [x] Sdílení QR kódu
 
 ---
 
@@ -93,6 +77,4 @@ npx expo start
 ## EMULATORT SETUP
 https://www.youtube.com/watch?v=xKGESzemfdw
 
-## 📄 Licence
 
-MIT
