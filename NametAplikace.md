@@ -16,8 +16,11 @@ Aplikace, která umožňuje:
 ### Databáze
 - [expo-sqlite](https://docs.expo.dev/versions/latest/sdk/sqlite/) – lokální ukládání skóre
 
-### QR funkce
-- [react-native-qrcode-svg](https://github.com/awesomejerry/react-native-qrcode-svg) – generování QR kódů
+### QR funkce, kamera permissions, file system a sharing
+- kamera permissions: expo-camera
+- QR kód: react-native-qrcode-svg
+- file system: expo-file-system
+- file sharing: expo-sharing
 
 ### Pomocné knihovny
 - [expo-sharing](https://docs.expo.dev/versions/latest/sdk/sharing/) – sdílení vygenerovaných QR kódů
